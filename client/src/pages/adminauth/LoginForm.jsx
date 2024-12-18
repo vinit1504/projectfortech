@@ -23,8 +23,9 @@ const LoginForm = () => {
     try {
       // Call the loginUser API function
       const response = await loginUser(value.email, value.password);
-      console.log("Login successful:", response);
-      navigate("/dashboard");
+      console.log("Login successful:", response);setTimeout(() => {
+        navigate("/dashboard");
+      }, 3000);
 
       // Show success toast
       toast.success("Login successful! Redirecting...");

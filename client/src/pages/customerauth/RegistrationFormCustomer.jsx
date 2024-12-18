@@ -23,8 +23,10 @@ const RegistrationFormCustomer = () => {
       console.log("Registration successful:", result);
       toast.success("Registration successful! Please log in.");
 
-      form.reset(); // Clears the form fields after submission
-      navigate("/login");
+      form.reset();
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000); // Clears the form fields after submission
       // Show success toast
     } catch (error) {
       console.error("Error during registration:", error);
