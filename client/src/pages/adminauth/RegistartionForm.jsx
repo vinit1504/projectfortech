@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { registerAdmin } from "./../../api/api.js";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Link, useNavigate } from "react-router-dom"; 
+import { registerAdmin } from "./../../api/api.js"; 
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css"; 
 
 const RegistrationFormCustomer = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ const RegistrationFormCustomer = () => {
     console.log("handlesubmit");
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError(""); // Clear any previous errors
 
     const form = e.target;
     const data = new FormData(form);
@@ -25,13 +25,19 @@ const RegistrationFormCustomer = () => {
       console.log("value", value);
       const response = await registerAdmin(value);
       console.log("Registration successful:", response);
-      navigate("/login");
+      navigate('/login')
 
+      // Reset the form after successful registration
       form.reset();
-
+      
+      // Show success toast
       toast.success("Registration successful! You can now log in.");
+
+      // Redirect to login or dashboard page (optional)
     } catch (err) {
       console.error("Error registering user:", err.message);
+      
+      // Set error state and show error toast
       setError("Email Id Already Exits.");
       toast.error("Email Id Already Exits.");
     } finally {
@@ -41,7 +47,9 @@ const RegistrationFormCustomer = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
+      {/* Card Container */}
       <div className="flex flex-col md:flex-row bg-gray-800 rounded-lg shadow-lg overflow-hidden w-full max-w-5xl gap-y-4 md:gap-x-8">
+        {/* Left Section - Form */}
         <div className="w-full md:w-1/2 p-6 md:p-8">
           <h2 className="text-2xl font-bold text-white mb-4">
             Create An Account As Admin
@@ -54,6 +62,7 @@ const RegistrationFormCustomer = () => {
           </p>
 
           <form onSubmit={handlesubmit}>
+            {/* First Name and Last Name */}
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-4">
               <input
                 type="text"
@@ -71,6 +80,7 @@ const RegistrationFormCustomer = () => {
               />
             </div>
 
+            {/* Email */}
             <div className="mb-4">
               <input
                 type="email"
@@ -81,6 +91,7 @@ const RegistrationFormCustomer = () => {
               />
             </div>
 
+            {/* Password */}
             <div className="mb-4">
               <input
                 type="password"
@@ -91,6 +102,7 @@ const RegistrationFormCustomer = () => {
               />
             </div>
 
+            {/* Checkbox and Terms */}
             <div className="mt-4 text-gray-400">
               <label className="inline-flex items-start">
                 <input
@@ -104,10 +116,7 @@ const RegistrationFormCustomer = () => {
                     Terms of Use
                   </Link>{" "}
                   and{" "}
-                  <Link
-                    to="/privacy-policy"
-                    className="text-blue-400 hover:underline"
-                  >
+                  <Link to="/privacy-policy" className="text-blue-400 hover:underline">
                     Privacy Policy
                   </Link>
                   .
@@ -115,6 +124,7 @@ const RegistrationFormCustomer = () => {
               </label>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full mt-6 p-3 text-center bg-blue-600 rounded-lg text-white hover:bg-blue-700"
@@ -127,6 +137,7 @@ const RegistrationFormCustomer = () => {
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
 
+        {/* Right Section - Illustration */}
         <div className="hidden md:flex w-full md:w-1/2 bg-gray-900 items-center justify-center">
           <img
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
@@ -136,6 +147,7 @@ const RegistrationFormCustomer = () => {
         </div>
       </div>
 
+      {/* Toast Container to display the toast notifications */}
       <ToastContainer />
     </div>
   );

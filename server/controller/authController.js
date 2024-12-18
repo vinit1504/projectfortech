@@ -1,16 +1,19 @@
 import bcrypt from "bcryptjs";
 import db from "../config/db.js";
 import crypto from "crypto";
-import { sendVerificationEmail } from "../helper/emailService.js"; 
+import { sendVerificationEmail } from "../helper/emailService.js"; // Import the email service
 import dotenv from "dotenv";
 
 dotenv.config();
 
+// Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Customer Registration
 export const registerCustomer = (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
+  // Input validation
   if (!first_name || !last_name || !email || !password) {
     return res.status(400).json({
       status: "failed",
@@ -34,8 +37,9 @@ export const registerCustomer = (req, res) => {
 
   const role = "customer";
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const token = crypto.randomBytes(32).toString("hex"); 
+  const token = crypto.randomBytes(32).toString("hex"); // Generate token
 
+  // Check if user already exists
   const checkQuery = "SELECT * FROM users WHERE email = ?";
   db.query(checkQuery, [email], (err, results) => {
     if (err) {
@@ -52,6 +56,7 @@ export const registerCustomer = (req, res) => {
       });
     }
 
+    // Insert new user with verification token
     const insertQuery =
       "INSERT INTO users (first_name, last_name, email, password, role, verification_token) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(
@@ -65,7 +70,7 @@ export const registerCustomer = (req, res) => {
           });
         }
 
-        sendVerificationEmail(email, token); 
+        sendVerificationEmail(email, token); // Send verification email
 
         return res.status(201).json({
           status: "success",
@@ -81,6 +86,7 @@ export const registerCustomer = (req, res) => {
 export const registerAdmin = (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
+  // Input validation
   if (!first_name || !last_name || !email || !password) {
     return res.status(400).json({
       status: "failed",
@@ -104,8 +110,9 @@ export const registerAdmin = (req, res) => {
 
   const role = "admin";
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const token = crypto.randomBytes(32).toString("hex"); 
+  const token = crypto.randomBytes(32).toString("hex"); // Generate token
 
+  // Check if user already exists
   const checkQuery = "SELECT * FROM users WHERE email = ?";
   db.query(checkQuery, [email], (err, results) => {
     if (err) {
@@ -121,6 +128,7 @@ export const registerAdmin = (req, res) => {
       });
     }
 
+    // Insert new admin with verification token
     const insertQuery =
       "INSERT INTO users (first_name, last_name, email, password, role, verification_token) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(
@@ -134,7 +142,7 @@ export const registerAdmin = (req, res) => {
           });
         }
 
-        sendVerificationEmail(email, token); 
+        sendVerificationEmail(email, token); // Send verification email
 
         return res.status(201).json({
           status: "success",
@@ -189,6 +197,7 @@ export const verifyEmail = (req, res) => {
 export const adminLogin = (req, res) => {
   const { email, password } = req.body;
 
+  // Input validation
   if (!email || !password) {
     return res.status(400).json({
       status: "failed",
@@ -203,6 +212,7 @@ export const adminLogin = (req, res) => {
     });
   }
 
+  // Check if user exists
   const query = "SELECT * FROM users WHERE email = ?";
   db.query(query, [email], (err, results) => {
     if (err) {
@@ -220,6 +230,7 @@ export const adminLogin = (req, res) => {
 
     const user = results[0];
 
+    // Role validation
     if (user.role !== "admin") {
       return res.status(403).json({
         status: "failed",
@@ -227,6 +238,7 @@ export const adminLogin = (req, res) => {
       });
     }
 
+    // Check if email is verified
     if (!user.is_verified) {
       return res.status(400).json({
         status: "failed",
@@ -234,6 +246,7 @@ export const adminLogin = (req, res) => {
       });
     }
 
+    // Password validation
     const isPasswordValid = bcrypt.compareSync(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({
