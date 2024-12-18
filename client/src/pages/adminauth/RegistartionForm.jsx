@@ -25,13 +25,13 @@ const RegistrationFormCustomer = () => {
       console.log("value", value);
       const response = await registerAdmin(value);
       console.log("Registration successful:", response);
+      toast.success("Registration successful! You can now log in.");
       navigate('/login')
 
       // Reset the form after successful registration
       form.reset();
       
       // Show success toast
-      toast.success("Registration successful! You can now log in.");
 
       // Redirect to login or dashboard page (optional)
     } catch (err) {

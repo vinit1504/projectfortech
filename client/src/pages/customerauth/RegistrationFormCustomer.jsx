@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; 
-import { registerCustomer } from "./../../api/api.js"; 
-import { toast, ToastContainer } from "react-toastify"; 
-import "react-toastify/dist/ReactToastify.css"; 
+import { Link, useNavigate } from "react-router-dom";
+import { registerCustomer } from "./../../api/api.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegistrationFormCustomer = () => {
   const [loading, setLoading] = useState(false);
@@ -21,11 +21,11 @@ const RegistrationFormCustomer = () => {
       setLoading(true); // Set loading to true while the request is in progress
       const result = await registerCustomer(formData); // Call the API function
       console.log("Registration successful:", result);
+      toast.success("Registration successful! Please log in.");
 
       form.reset(); // Clears the form fields after submission
       navigate("/login");
       // Show success toast
-      toast.success("Registration successful! Please log in.");
     } catch (error) {
       console.error("Error during registration:", error);
       setError("Registration failed. Please try again."); // Set error message
