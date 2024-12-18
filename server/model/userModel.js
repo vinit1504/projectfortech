@@ -1,6 +1,5 @@
 import db from "../config/db.js";
 
-// SQL query to create the users table if it does not exist
 const createUsersTable = `
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,16 +14,14 @@ CREATE TABLE IF NOT EXISTS users (
 
 `;
 
-// Execute the query to create the table
 db.query(createUsersTable, (err, result) => {
   if (err) {
     console.error("Error creating users table:", err.message);
-    throw err; // Throw error to stop execution if table creation fails
+    throw err; 
   }
   console.log("Users table ready!");
 });
 
-// Ensure the database connection is properly closed after operations
 db.end((err) => {
   if (err) {
     console.error("Error closing the connection:", err.message);
